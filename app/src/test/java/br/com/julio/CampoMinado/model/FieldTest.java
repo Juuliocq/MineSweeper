@@ -98,13 +98,13 @@ public class FieldTest {
 
     @Test
     void isNotNeighbourTest() {
-        Field field2 = new Field(3, 2);
+        Field field2 = new Field(3, 3);
 
         assertFalse(fieldTest.isNeighbour(field2));
     }
 
     @Test
-    void iaddNeighbourRightTest() {
+    void addNeighbourRightTest() {
         Field field2 = new Field(1, 2);
 
         assertTrue(fieldTest.addNeighbour(field2));
@@ -170,18 +170,20 @@ public class FieldTest {
     void alterMarkedTrueTest() {
         fieldTest.alterMarked();
 
-        assertTrue(fieldTest.getMarked());
+        assertTrue(fieldTest.isMarked());
     }
 
     @Test
     void alterMarkedFalseTest() {
+        fieldTest.alterMarked();
+        fieldTest.alterMarked();
 
-        assertFalse(fieldTest.getMarked());
+        assertFalse(fieldTest.isMarked());
     }
 
     @Test
     void openFieldOpenedFalseMarkedFalseMinedFalseTest() {
-        
+
         assertTrue(fieldTest.open());
     }
 
@@ -191,6 +193,7 @@ public class FieldTest {
         fieldTest.open();
         fieldTest.alterMarked();
         fieldTest.setMined(true);
+
         assertFalse(fieldTest.open());
     }
 
@@ -198,6 +201,7 @@ public class FieldTest {
     void openFieldOpenedTrueMarkedFalseMinedFalseTest() {
 
         fieldTest.open();
+
         assertFalse(fieldTest.open());
     }
 
@@ -205,6 +209,7 @@ public class FieldTest {
     void openFieldOpenedFalseMarkedTrueMinedFalseTest() {
 
         fieldTest.alterMarked();
+
         assertFalse(fieldTest.open());
     }
 
@@ -212,6 +217,7 @@ public class FieldTest {
     void openFieldOpenedFalseMarkedFalseMinedTrueTest() {
 
         fieldTest.setMined(true);
+
         assertThrows(ExplosionException.class, () -> {
             fieldTest.open();
         });
@@ -222,6 +228,7 @@ public class FieldTest {
 
         fieldTest.open();
         fieldTest.alterMarked();
+
         assertFalse(fieldTest.open());
     }
 
@@ -230,6 +237,7 @@ public class FieldTest {
 
         fieldTest.alterMarked();
         fieldTest.setMined(true);
+
         assertFalse(fieldTest.open());
     }
 
@@ -238,11 +246,31 @@ public class FieldTest {
 
         fieldTest.open();
         fieldTest.setMined(true);
+
         assertFalse(fieldTest.open());
     }
-    
+
     @Test
-    void safeNeighbourNotMinedTest(){
+    void openFieldNotSafeNeighbour() {
+        Field field2 = new Field(true, false, false, 0, 0);
+        fieldTest.addNeighbour(field2);
+
+        assertFalse(fieldTest.open());
+    }
+
+    @Test
+    void openFieldSafeNeighbour() {
+        Field field2 = new Field(false, false, false, 0, 0);
+        Field field3 = new Field(false, false, false, 0, 1);
+
+        fieldTest.addNeighbour(field2);
+        fieldTest.addNeighbour(field3);
+
+        assertTrue(fieldTest.open());
+    }
+
+    @Test
+    void safeNeighbourNotMinedTest() {
         Field field2 = new Field(false, false, false, 0, 0);
         Field field3 = new Field(false, false, false, 0, 1);
         Field field4 = new Field(false, false, false, 0, 2);
@@ -251,7 +279,7 @@ public class FieldTest {
         Field field7 = new Field(false, false, false, 2, 0);
         Field field8 = new Field(false, false, false, 2, 1);
         Field field9 = new Field(false, false, false, 2, 2);
-        
+
         fieldTest.addNeighbour(field2);
         fieldTest.addNeighbour(field3);
         fieldTest.addNeighbour(field4);
@@ -260,12 +288,12 @@ public class FieldTest {
         fieldTest.addNeighbour(field7);
         fieldTest.addNeighbour(field8);
         fieldTest.addNeighbour(field9);
-        
+
         assertTrue(fieldTest.safeNeighbour());
     }
-    
+
     @Test
-    void safeNeighbourMinedTest(){
+    void safeNeighbourMinedTest() {
         Field field2 = new Field(true, false, false, 0, 0);
         Field field3 = new Field(false, false, false, 0, 1);
         Field field4 = new Field(true, false, false, 0, 2);
@@ -274,7 +302,7 @@ public class FieldTest {
         Field field7 = new Field(false, false, false, 2, 0);
         Field field8 = new Field(true, false, false, 2, 1);
         Field field9 = new Field(false, false, false, 2, 2);
-        
+
         fieldTest.addNeighbour(field2);
         fieldTest.addNeighbour(field3);
         fieldTest.addNeighbour(field4);
@@ -283,7 +311,7 @@ public class FieldTest {
         fieldTest.addNeighbour(field7);
         fieldTest.addNeighbour(field8);
         fieldTest.addNeighbour(field9);
-        
+
         assertFalse(fieldTest.safeNeighbour());
     }
 }

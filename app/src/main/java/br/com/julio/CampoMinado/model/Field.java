@@ -56,7 +56,7 @@ public class Field {
                             + 
                          Math.abs(this.yColumn - field.yColumn);
         
-        if(difference == 1 || (isDiagonal == true && difference == 2)){
+        if(difference == 1 || (isDiagonal && difference == 2)){
             isNeighbour = true;
         }
         
@@ -64,7 +64,7 @@ public class Field {
     }
     
     void alterMarked() {
-        if(opened == false){
+        if(!opened){
             marked = !marked;
         }
     }
@@ -80,20 +80,18 @@ public class Field {
             
             if (safeNeighbour()){
             neighbours.forEach(a -> a.open());
-        }
+                return true;
+            }     
             
-            return true;
-            
         }
-        
-        return false;
-    }
+            return false;
+        }
     
     boolean safeNeighbour(){
         return neighbours.stream().noneMatch(a -> a.mined);
     }
     
-    public boolean getMarked(){
+    public boolean isMarked(){
         return marked;
     }    
     
